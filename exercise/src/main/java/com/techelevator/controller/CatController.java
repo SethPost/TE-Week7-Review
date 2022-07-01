@@ -5,6 +5,8 @@ import com.techelevator.model.CatCard;
 import com.techelevator.model.CatCardNotFoundException;
 import com.techelevator.services.CatFactService;
 import com.techelevator.services.CatPicService;
+import com.techelevator.services.RestCatFactService;
+import com.techelevator.services.RestCatPicService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,8 +54,17 @@ public class CatController {
         catCardDao.delete(id);
     }
 
-    public CatCard randomCatCard()
+    @RequestMapping(path = "/api/cards/random", method = RequestMethod.GET)
+    public CatCard randomCatCard(RestCatFactService restCatFactService, RestCatPicService restCatPicService)
     {
+        CatCard catCard = new CatCard();
+        String catFact = restCatFactService.getFact().getText();
+        String imgURL = restCatPicService.getPic().getFile();
+        //String caption = restCatPicService.getPic().getFile();
 
+        catCard.setCatFact(catFact);
+        catCard.setImgUrl(imgURL);
+
+        return catCard;
     }
 }
